@@ -91,22 +91,46 @@ async def next_page(bot, query):
         off_set = offset - 10
     if n_offset == 0:
         btn.append(
-            [InlineKeyboardButton("⏪ BACK", callback_data=f"next_{req}_{key}_{off_set}"),
-             InlineKeyboardButton(f"📃 Pages {round(int(offset) / 10) + 1} / {round(total / 10)}",
-                                  callback_data="pages")]
+            [
+                InlineKeyboardButton(
+                    "⏪ BACK", callback_data=f"next_{req}_{key}_{off_set}"
+                ),
+                InlineKeyboardButton(
+                    f"📃 Pages {round(offset / 10) + 1} / {round(total / 10)}",
+                    callback_data="pages",
+                ),
+            ]
         )
+
     elif off_set is None:
         btn.append(
-            [InlineKeyboardButton(f"🗓 {round(int(offset) / 10) + 1} / {round(total / 10)}", callback_data="pages"),
-             InlineKeyboardButton("NEXT ⏩", callback_data=f"next_{req}_{key}_{n_offset}")])
+            [
+                InlineKeyboardButton(
+                    f"🗓 {round(offset / 10) + 1} / {round(total / 10)}",
+                    callback_data="pages",
+                ),
+                InlineKeyboardButton(
+                    "NEXT ⏩", callback_data=f"next_{req}_{key}_{n_offset}"
+                ),
+            ]
+        )
+
     else:
         btn.append(
             [
-                InlineKeyboardButton("⏪ BACK", callback_data=f"next_{req}_{key}_{off_set}"),
-                InlineKeyboardButton(f"🗓 {round(int(offset) / 10) + 1} / {round(total / 10)}", callback_data="pages"),
-                InlineKeyboardButton("NEXT ⏩", callback_data=f"next_{req}_{key}_{n_offset}")
-            ],
+                InlineKeyboardButton(
+                    "⏪ BACK", callback_data=f"next_{req}_{key}_{off_set}"
+                ),
+                InlineKeyboardButton(
+                    f"🗓 {round(offset / 10) + 1} / {round(total / 10)}",
+                    callback_data="pages",
+                ),
+                InlineKeyboardButton(
+                    "NEXT ⏩", callback_data=f"next_{req}_{key}_{n_offset}"
+                ),
+            ]
         )
+
     try:
         await query.edit_message_reply_markup(
             reply_markup=InlineKeyboardMarkup(btn)
@@ -264,10 +288,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 parse_mode="md"
             )
         else:
-            await query.message.edit_text(
-                f"Some error occurred!!",
-                parse_mode="md"
-            )
+            await query.message.edit_text("Some error occurred!!", parse_mode="md")
         return await query.answer('Piracy Is Crime')
     elif "deletecb" in query.data:
         await query.answer()
@@ -282,10 +303,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 "Successfully deleted connection"
             )
         else:
-            await query.message.edit_text(
-                f"Some error occurred!!",
-                parse_mode="md"
-            )
+            await query.message.edit_text("Some error occurred!!", parse_mode="md")
         return await query.answer('Piracy Is Crime')
     elif query.data == "backcb":
         await query.answer()
@@ -362,8 +380,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
                     chat_id=query.from_user.id,
                     file_id=file_id,
                     caption=f_caption,
-                    protect_content=True if ident == "filep" else False 
+                    protect_content=ident == "filep",
                 )
+
                 await query.answer('Check PM, I have sent files in pm', show_alert=True)
         except UserIsBlocked:
             await query.answer('Unblock the bot mahn !', show_alert=True)
@@ -398,8 +417,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
             chat_id=query.from_user.id,
             file_id=file_id,
             caption=f_caption,
-            protect_content=True if ident == 'checksubp' else False
+            protect_content=ident == 'checksubp',
         )
+
     elif query.data == "pages":
         await query.answer()
     elif query.data == "start":
